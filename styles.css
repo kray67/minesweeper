@@ -1,0 +1,135 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --clr-bg: #022b3a;
+    --clr-text: #ffffff;
+    --clr-primary: #bfdbf7;
+    --clr-secondary: #1f7a8c;
+    --clr-safe: #c3eb78;
+    --clr-danger: #b6174b;
+    --sqr-width: 3rem;
+    font-size: 10px;
+}
+
+body {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    overflow: hidden;
+    background-color: var(--clr-bg);
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.title {
+    width: 100%;
+    font-size: 5rem;
+    text-align: center;
+    color: var(--clr-text);
+}
+
+/* .board {}
+
+.board-header {} */
+
+.minefield {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--col-count), 1fr);
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    border: 0.2rem solid var(--clr-secondary);
+}
+
+#gameOver {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--clr-text);
+}
+
+#gameOver.show {
+    display: flex;
+}
+
+.square {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--sqr-width);
+    height: var(--sqr-width);
+    border-radius: 0.25rem;
+    background-color: var(--clr-primary);
+    font-size: 1.5rem;
+}
+
+.square.mine {
+    background-color: var(--clr-danger);
+}
+
+.square.empty {
+    background-color: var(--clr-safe);
+    /* box-shadow: inset 3px 5px 10px 0px rgba(0,0,0,0.75); */
+}
+
+.square.show {
+    box-shadow: inset 3px 5px 10px 0px rgba(0,0,0,0.75);
+}
+
+.square.sq_1 {
+    color: blue;
+}
+.square.sq_2 {
+    color: green;
+}
+.square.sq_3 {
+    color: red;
+}
+.square.sq_4 {
+    color: purple;
+}
+.square.sq_5 {
+    color: orange;
+}
+.square.sq_6 {
+    color: fuchsia;
+}
+
+.square::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.25rem;
+    background-color: var(--clr-primary);
+    z-index: 1;
+}
+
+.square.show::after {
+    background-color: transparent;
+}
+
+.square.flag::after {
+    content: '🚩';
+}
