@@ -10,6 +10,7 @@
     --clr-bg: #022b3a;
     --clr-text: #ffffff;
     --clr-primary: #bfdbf7;
+    --clr-primary-accent: #8fa4b9;
     --clr-secondary: #1f7a8c;
     --clr-safe: #c3eb78;
     --clr-danger: #b6174b;
@@ -27,6 +28,7 @@ body {
     gap: 3rem;
     overflow: hidden;
     background-color: var(--clr-bg);
+    color: var(--clr-text);
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
@@ -37,15 +39,35 @@ body {
     color: var(--clr-text);
 }
 
-/* .board {}
+.board {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
-.board-header {} */
+.board-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    border: 0.2rem solid var(--clr-secondary);
+}
+
+.timer {
+    font-size: 2rem;
+}
+
+.restart {
+    font-size: 2rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 .minefield {
     position: relative;
     display: grid;
     grid-template-columns: repeat(var(--col-count), 1fr);
-    flex-wrap: wrap;
     gap: 0.2rem;
     padding: 0.4rem;
     border-radius: 0.5rem;
@@ -60,7 +82,7 @@ body {
     inset: 0;
     border-radius: 0.5rem;
     background-color: rgba(0,0,0,0.5);
-    z-index: 2;
+    z-index: 99;
     font-size: 6rem;
     font-weight: 700;
     color: var(--clr-text);
@@ -78,21 +100,16 @@ body {
     width: var(--sqr-width);
     height: var(--sqr-width);
     border-radius: 0.25rem;
-    background-color: var(--clr-primary);
+    background-color: var(--clr-primary-accent);
     font-size: 1.5rem;
 }
 
-.square.mine {
+.square.mine.lose {
     background-color: var(--clr-danger);
 }
 
-.square.empty {
+.square.mine.win {
     background-color: var(--clr-safe);
-    /* box-shadow: inset 3px 5px 10px 0px rgba(0,0,0,0.75); */
-}
-
-.square.show {
-    box-shadow: inset 3px 5px 10px 0px rgba(0,0,0,0.75);
 }
 
 .square.sq_1 {
@@ -123,11 +140,12 @@ body {
     inset: 0;
     border-radius: 0.25rem;
     background-color: var(--clr-primary);
+    /* box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.75); */
     z-index: 1;
 }
 
 .square.show::after {
-    background-color: transparent;
+    display: none;
 }
 
 .square.flag::after {

@@ -1,8 +1,11 @@
 const ROWS = 15
 const COLS = 15
 const TOTAL_SQUARES = ROWS*COLS
-const TOTAL_MINES = 25
-const SQUARES = []
+const TOTAL_MINES = 35
+let SQUARES = []
+let GAME_STARTED = false
+let TIMER = 0
+let TIMER_INTERVAL = null
 
 /* Square Obj Template {
     id: '1-1', // STR: row num & col num
@@ -15,6 +18,8 @@ const SQUARES = []
 } */
 
 const $board = document.getElementById('board')
+const $timer = document.getElementById('timer')
+const $restart = document.getElementById('restart')
 const $minefield = document.getElementById('minefield')
 const $gameOver = document.getElementById('gameOver')
 // Set number of columns to be used in CSS grid
@@ -89,7 +94,6 @@ const checkNeighbourMines = () => {
 }
 
 const checkNeighbours = (id) => {
-    console.log('checkNeighbours')
     const square = SQUARES.find(sq => sq.id === id)
     const directions = [
         { dRow: -1, dCol: -1 },
@@ -132,11 +136,21 @@ const renderSquares = () => {
 
 createSquares()
 
-
 const squareClickHandler = ($event) => {
+    if (!GAME_STARTED) {
+        GAME_STARTED = true
+        startGameClock()
+    }
     const sq_id = $event.target.id;
     if ($event.target.classList.contains('show')) return
     squareShow(parseFloat(sq_id))
+}
+
+const startGameClock = () => {
+    TIMER_INTERVAL = setInterval(() => {
+      TIMER++
+      $timer.innerHTML = TIMER
+    }, 1000)
 }
 
 const squareRightClickHandler = ($event) => {
@@ -156,7 +170,11 @@ const squareShow = (id) => {
     sq_obj.show = true
     $sq.classList.add('show')
     if (sq_obj.empty) handleEmptySquare(id)
-    if (sq_obj.mine) handleGameOver()
+    if (sq_obj.mine) {
+        handleGameOver()
+        return
+    }
+    checkForWin()
 }
 
 const handleEmptySquare = (id) => {
@@ -176,16 +194,46 @@ const handleEmptySquare = (id) => {
 }
 
 const handleGameOver = () => {
+    const elapsedTime = $timer.innerHTML
+    clearInterval(TIMER_INTERVAL)
+    $timer.innerHTML = elapsedTime
+    $gameOver.classList.add('show')
+    $gameOver.innerHTML = ('GAME OVER')
     $squares.forEach($sq => {
         $sq.style.pointerEvents = 'none'
-        $gameOver.classList.add('show')
         setTimeout(() => {
             if ($sq.classList.contains('mine')) {
                 $sq.classList.remove('flag')
                 $sq.classList.add('show')
+                $sq.classList.add('lose')
             }
         }, 150)
     })
+}
+
+const checkForWin = () => {
+    const HIDDEN_SQUARES = SQUARES.filter(sq => !sq.show)
+    if (HIDDEN_SQUARES.length === TOTAL_MINES) {
+        const elapsedTime = $timer.innerHTML
+        clearInterval(TIMER_INTERVAL)
+        $timer.innerHTML = elapsedTime;
+        $gameOver.classList.add('show')
+        $gameOver.innerHTML = ('YOU WIN!')
+        $squares.forEach($sq => {
+            $sq.style.pointerEvents = 'none'
+            setTimeout(() => {
+                $sq.classList.remove('flag')
+                $sq.classList.add('show')
+                if ($sq.classList.contains('mine')) {
+                    $sq.classList.add('win')
+                }
+            }, 150)
+        })
+    }
+}
+
+const restartGame = () => {
+    location.reload()
 }
 
 const $squares = document.querySelectorAll('.square')
@@ -193,3 +241,4 @@ $squares.forEach(square => {
     square.addEventListener('click', squareClickHandler)
     square.addEventListener('contextmenu', squareRightClickHandler)
 })
+$restart.addEventListener('click', restartGame)
